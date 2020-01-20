@@ -66,18 +66,7 @@
     var myList = document.getElementById("todo-list");
 
     json_data.forEach(element => {
-      var listItem = document.createElement("li");
-      listItem.appendChild(
-        document.createTextNode(element.title) 
-      );
-      var deleteLink = document.createElement("a");
-      deleteLink.href = "#";
-      deleteLink.className = "btn btn-sm btn-danger m-1 delete";
-      deleteLink.appendChild(
-        document.createTextNode("Delete") 
-      );
-      listItem.appendChild(deleteLink);
-      myList.appendChild(listItem);
+      newTodo(element.title);
     });
 
     var closeButtons = document.getElementsByClassName("delete");
@@ -91,11 +80,13 @@
       myList.removeChild(li);
     }
 
-    function newTodo() {
-      var inputVal = document.getElementById("todoTitle").value;
+    function newTodo(todoTitle) {
+      if (!todoTitle) {
+        todoTitle = document.getElementById("todoTitle").value;
+      }
       var listItem = document.createElement("li");
       listItem.appendChild(
-        document.createTextNode(inputVal) 
+        document.createTextNode(todoTitle) 
       );
       var deleteLink = document.createElement("a");
       deleteLink.href = "#";
