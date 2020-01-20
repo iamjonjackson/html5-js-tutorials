@@ -69,6 +69,8 @@
       newTodo(element.title);
     });
 
+    registerEventListeners();
+
     function registerEventListeners() {
       var closeButtons = document.getElementsByClassName("delete");
 
@@ -98,6 +100,7 @@
       );
       listItem.appendChild(deleteLink);
       myList.appendChild(listItem);
+      registerEventListeners();
     }
 
   </script>
