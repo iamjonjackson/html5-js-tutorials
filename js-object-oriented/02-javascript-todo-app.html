@@ -67,6 +67,13 @@
       listItem.appendChild(
         document.createTextNode(element.title) 
       );
+      var deleteLink = document.createElement("a");
+      deleteLink.href = "#";
+      deleteLink.className = "btn btn-sm btn-danger m-1";
+      deleteLink.appendChild(
+        document.createTextNode("Delete") 
+      );
+      listItem.appendChild(deleteLink);
       myList.appendChild(listItem);
     });
 
