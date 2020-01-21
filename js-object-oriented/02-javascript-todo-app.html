@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>JavaScript Tutorial - Working with JSON</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
 
   <body>
@@ -126,8 +127,10 @@
     }
 
     function deleteAllTodos() {
-      localStorage.removeItem('json_data');
-      myList.innerHTML = '';
+      if (confirm("Are you sure you want to delete all of your Todos?")) {
+        localStorage.removeItem('json_data');
+        myList.innerHTML = '';
+      }
     }
 
   </script>
