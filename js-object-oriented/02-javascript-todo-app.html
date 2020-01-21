@@ -60,6 +60,14 @@
     function deleteTodo() {
       var li = this.parentElement;
       myList.removeChild(li);
+      
+      var json_temp = JSON.parse( localStorage.getItem('json_data') );
+      // how do we delete the item from json_temp without a unique identifier?
+      // ...
+      localStorage.setItem('json_data', 
+        JSON.stringify(json_temp)
+      );
+
     }
 
     function newTodo(todoTitle) {
@@ -104,7 +112,7 @@
       localStorage.setItem('json_data', 
         JSON.stringify(json_temp)
       );
-      
+
     }
 
   </script>
