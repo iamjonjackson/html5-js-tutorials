@@ -22,6 +22,7 @@
             <input type="text" class="form-control" id="todoTitle" placeholder="Todo title...">
             <button onclick="newTodo()" class="addBtn btn btn-sm btn-primary form-control mt-3">Add</span>
           </form>
+          <button onclick="deleteAllTodos()" class="addBtn btn btn-sm btn-danger form-control mt-5">Delete All</span>
         </div>
       </div>
       
@@ -122,6 +123,11 @@
       // return ID of new todo
       return todoID;
 
+    }
+
+    function deleteAllTodos() {
+      localStorage.removeItem('json_data');
+      myList.innerHTML = '';
     }
 
   </script>
