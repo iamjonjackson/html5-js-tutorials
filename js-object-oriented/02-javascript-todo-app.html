@@ -30,12 +30,14 @@
   </body>
 
   <script>
-    var json_data = [
-      {
-        "title": "sample todo item",
-        "completed": false
-      }
-    ];
+    // var json_data = [
+    //   {
+    //     "title": "sample todo item",
+    //     "completed": false
+    //   }
+    // ];
+
+    var json_data = localStorage.getItem('json_data');
 
     var myList = document.getElementById("todo-list");
 
