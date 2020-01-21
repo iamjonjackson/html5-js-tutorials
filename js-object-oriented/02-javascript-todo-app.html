@@ -67,12 +67,16 @@
     function newTodo(todoTitle, todoID) {
       if (!todoTitle && !todoID) {
         todoTitle = document.getElementById("todoTitle").value;
-        var todoID = storeTodoLocal(todoTitle);
+        if (todoTitle) {
+          var todoID = storeTodoLocal(todoTitle);
+        }
       }
-      var todoHTML = '<li style="display:none" data-id="' + todoID + '">' + todoTitle + '<a href="#" class="btn btn-sm btn-danger m-1 delete">Delete</a></li>';
-      $("#todo-list").append(todoHTML);
-      $("li[data-id="+todoID+"]").fadeIn();
-      registerEventListeners();
+      if (todoTitle) {
+        var todoHTML = '<li style="display:none" data-id="' + todoID + '">' + todoTitle + '<a href="#" class="btn btn-sm btn-danger m-1 delete">Delete</a></li>';
+        $("#todo-list").append(todoHTML);
+        $("li[data-id="+todoID+"]").fadeIn();
+        registerEventListeners();
+      }
     }
 
     function storeTodoLocal(todoTitle) {
