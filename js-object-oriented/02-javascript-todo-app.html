@@ -5,6 +5,7 @@
     <title>JavaScript Tutorial - Working with JSON</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   </head>
 
   <body>
@@ -32,16 +33,10 @@
   </body>
 
   <script>
-    // var json_data = [
-    //   {
-    //     "title": "sample todo item",
-    //     "completed": false
-    //   }
-    // ];
 
     var json_data = JSON.parse( localStorage.getItem('json_data') );
 
-    var myList = document.getElementById("todo-list");
+    // var myList = document.getElementById("todo-list");
 
     if (json_data) {
       json_data.forEach(element => {
@@ -54,19 +49,24 @@
     registerEventListeners();
 
     function registerEventListeners() {
-      var closeButtons = document.getElementsByClassName("delete");
+      // var closeButtons = document.getElementsByClassName("delete");
 
-      for (var i = 0; i < closeButtons.length; i++) {
-        closeButtons[i].addEventListener('click', deleteTodo, false);
-      }
+      // for (var i = 0; i < closeButtons.length; i++) {
+      //   closeButtons[i].addEventListener('click', deleteTodo, false);
+      // }
+      $(".delete").on("click", function(){
+        var todoID = $(this).parent().attr('data-id');
+        deleteTodo(todoID);
+      });
     }
 
-    function deleteTodo() {
-      var li = this.parentElement;
-      myList.removeChild(li);
+    function deleteTodo(todoID) {
+      // var li = this.parentElement;
+      // myList.removeChild(li);
+      $("li[data-id="+todoID+"]").remove();
       
       var json_temp = JSON.parse( localStorage.getItem('json_data') );
-      delete json_temp[li.dataset.id];
+      delete json_temp[todoID];
       localStorage.setItem('json_data', 
         JSON.stringify(json_temp)
       );
@@ -78,19 +78,21 @@
         todoTitle = document.getElementById("todoTitle").value;
         var todoID = storeTodoLocal(todoTitle);
       }
-      var listItem = document.createElement("li");
-      listItem.dataset.id = todoID;
-      listItem.appendChild(
-        document.createTextNode(todoTitle) 
-      );
-      var deleteLink = document.createElement("a");
-      deleteLink.href = "#";
-      deleteLink.className = "btn btn-sm btn-danger m-1 delete";
-      deleteLink.appendChild(
-        document.createTextNode("Delete") 
-      );
-      listItem.appendChild(deleteLink);
-      myList.appendChild(listItem);
+      // var listItem = document.createElement("li");
+      // listItem.dataset.id = todoID;
+      // listItem.appendChild(
+      //   document.createTextNode(todoTitle) 
+      // );
+      // var deleteLink = document.createElement("a");
+      // deleteLink.href = "#";
+      // deleteLink.className = "btn btn-sm btn-danger m-1 delete";
+      // deleteLink.appendChild(
+      //   document.createTextNode("Delete") 
+      // );
+      // listItem.appendChild(deleteLink);
+      // myList.appendChild(listItem);
+      var todoHTML = '<li data-id="' + todoID + '">' + todoTitle + '<a href="#" class="btn btn-sm btn-danger m-1 delete">Delete</a></li>';
+      $("#todo-list").append(todoHTML);
       registerEventListeners();
     }
 
@@ -129,7 +131,8 @@
     function deleteAllTodos() {
       if (confirm("Are you sure you want to delete all of your Todos?")) {
         localStorage.removeItem('json_data');
-        myList.innerHTML = '';
+        // myList.innerHTML = '';
+        $("#todo-list").empty();
       }
     }
 
