@@ -43,7 +43,9 @@
 
     if (json_data) {
       json_data.forEach(element => {
-        newTodo(element.title);
+        if (element) {
+          newTodo(element.title, element.id);
+        }
       });
     }
 
@@ -62,20 +64,20 @@
       myList.removeChild(li);
       
       var json_temp = JSON.parse( localStorage.getItem('json_data') );
-      // how do we delete the item from json_temp without a unique identifier?
-      // ...
+      delete json_temp[li.dataset.id];
       localStorage.setItem('json_data', 
         JSON.stringify(json_temp)
       );
 
     }
 
-    function newTodo(todoTitle) {
-      if (!todoTitle) {
+    function newTodo(todoTitle, todoID) {
+      if (!todoTitle && !todoID) {
         todoTitle = document.getElementById("todoTitle").value;
-        storeTodoLocal(todoTitle);
+        var todoID = storeTodoLocal(todoTitle);
       }
       var listItem = document.createElement("li");
+      listItem.dataset.id = todoID;
       listItem.appendChild(
         document.createTextNode(todoTitle) 
       );
@@ -99,8 +101,12 @@
         json_temp = [];
       }
 
+      // creating a new todo ID based on length of existing localstorage array
+      var todoID = json_temp.length;
+
       // add new todo object to JSON
       json_temp.push({
+        "id": todoID,
         "title": todoTitle,
         "completed": false
       });
@@ -112,6 +118,9 @@
       localStorage.setItem('json_data', 
         JSON.stringify(json_temp)
       );
+
+      // return ID of new todo
+      return todoID;
 
     }
 
