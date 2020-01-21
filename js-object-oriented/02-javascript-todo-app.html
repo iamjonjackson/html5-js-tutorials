@@ -37,7 +37,7 @@
     //   }
     // ];
 
-    var json_data = localStorage.getItem('json_data');
+    var json_data = JSON.parse( localStorage.getItem('json_data') );
 
     var myList = document.getElementById("todo-list");
 
