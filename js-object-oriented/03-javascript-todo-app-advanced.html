@@ -22,6 +22,7 @@
         <div class="col-md-4">
           <form>
             <input type="text" class="form-control" id="todoTitle" placeholder="Todo title...">
+            <textarea rows="3" class="form-control mt-3" id="todoDesc" placeholder="Todo description..."></textarea>
             <button onclick="newTodo()" class="addBtn btn btn-sm btn-primary form-control mt-3">Add</span>
           </form>
           <button onclick="deleteAllTodos()" class="addBtn btn btn-sm btn-danger form-control mt-5">Delete All</span>
@@ -39,7 +40,7 @@
     if (json_data) {
       json_data.forEach(element => {
         if (element) {
-          newTodo(element.title, element.id);
+          newTodo(element.title, element.description, element.id);
         }
       });
     }
@@ -64,11 +65,12 @@
 
     }
 
-    function newTodo(todoTitle, todoID) {
+    function newTodo(todoTitle, todoDesc, todoID) {
       if (!todoTitle && !todoID) {
         todoTitle = document.getElementById("todoTitle").value;
+        todoDesc = document.getElementById("todoDesc").value;
         if (todoTitle) {
-          var todoID = storeTodoLocal(todoTitle);
+          var todoID = storeTodoLocal(todoTitle, todoDesc);
         }
       }
       if (todoTitle) {
@@ -79,7 +81,7 @@
       }
     }
 
-    function storeTodoLocal(todoTitle) {
+    function storeTodoLocal(todoTitle, todoDesc) {
       
       // retrieve and parse existing JSON from localstorage
       var json_temp = JSON.parse( localStorage.getItem('json_data') );
@@ -95,6 +97,7 @@
       json_temp.push({
         "id": todoID,
         "title": todoTitle,
+        "description": todoDesc,
         "completed": false
       });
 
