@@ -42,7 +42,8 @@
             </button>
           </div>
           <div class="modal-body">
-            <p>Modal body text goes here.</p>
+            <p>Title: <span id="todo-title"></span></p>
+            <p>Description: <span id="todo-description"></span></p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary">Save changes</button>
@@ -73,6 +74,18 @@
         var todoID = $(this).parent().attr('data-id');
         deleteTodo(todoID);
       });
+      $("a[data-target='#todoModal']").on("click", function() {
+        var todoID = $(this).parent().attr('data-id');
+        var currentTodo = getTodo( todoID );
+        console.log(currentTodo);
+        $("span#todo-title").html(currentTodo.title);
+        $("span#todo-description").html(currentTodo.description);
+      })
+    }
+
+    function getTodo(id) {
+      var json_temp = JSON.parse( localStorage.getItem('json_data') );
+      return json_temp[id];
     }
 
     function deleteTodo(todoID) {
