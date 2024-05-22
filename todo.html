@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>JavaScript Tutorial - Todo App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <h1>Javascript Todo App</h1>
+      
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <ul id="todo-list">
+            
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <form>
+            <input type="text" class="form-control" id="todoTitle" placeholder="Todo title...">
+            <textarea rows="3" class="form-control mt-3" id="todoDesc" placeholder="Todo description..."></textarea>
+            <button onclick="newTodo()" class="addBtn btn btn-sm btn-primary form-control mt-3">Add</span>
+          </form>
+          <button onclick="deleteAllTodos()" class="addBtn btn btn-sm btn-danger form-control mt-5">Delete All</span>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="todoModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Todo Details</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Title: <span id="todo-title"></span></p>
+            <p>Description: <span id="todo-description"></span></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+  </body>
+
+  <script>
+
+    var json_data = JSON.parse( localStorage.getItem('json_data') );
+
+    if (json_data) {
+      json_data.forEach(element => {
+        if (element) {
+          newTodo(element.title, element.description, element.id);
+        }
+      });
+    }
+
+    registerEventListeners();
+
+    function registerEventListeners() {
+      var deleteButtons = document.querySelectorAll(".delete");
+      deleteButtons.forEach(function(button) {
+        button.addEventListener("click", function() {
+          var todoID = this.parentNode.getAttribute('data-id');
+          deleteTodo(todoID);
+        });
+      });
+      var todoLinks = document.querySelectorAll("a[data-target='#todoModal']");
+      todoLinks.forEach(function(link) {
+        link.addEventListener("click", function() {
+          var todoID = this.parentNode.getAttribute('data-id');
+          var currentTodo = getTodo(todoID);
+          console.log(currentTodo);
+          document.getElementById("todo-title").innerHTML = currentTodo.title;
+          document.getElementById("todo-description").innerHTML = currentTodo.description;
+        });
+      });
+    }
+
+    function getTodo(id) {
+      var json_temp = JSON.parse( localStorage.getItem('json_data') );
+      return json_temp[id];
+    }
+
+    function deleteTodo(todoID) {
+      var todoElement = document.querySelector("li[data-id='" + todoID + "']");
+      if (todoElement) {
+        todoElement.style.display = "none";
+      }
+      
+      var json_temp = JSON.parse( localStorage.getItem('json_data') );
+      delete json_temp[todoID];
+      localStorage.setItem('json_data', 
+        JSON.stringify(json_temp)
+      );
+
+    }
+
+    function newTodo(todoTitle, todoDesc, todoID) {
+      if (!todoTitle && !todoID) {
+        todoTitle = document.getElementById("todoTitle").value;
+        todoDesc = document.getElementById("todoDesc").value;
+        if (todoTitle) {
+          var todoID = storeTodoLocal(todoTitle, todoDesc);
+        }
+      }
+      if (todoTitle) {
+        console.log(todoTitle);
+        var todoHTML = '<a href="#" data-toggle="modal" data-target="#todoModal">' + todoTitle + '</a> <a href="#" class="btn btn-sm btn-danger m-1 delete">Delete</a>';
+        var todoList = document.getElementById("todo-list");
+        var newTodoElement = document.createElement("li");
+        newTodoElement.setAttribute("data-id", todoID);
+        newTodoElement.innerHTML = todoHTML;
+        todoList.appendChild(newTodoElement);
+        registerEventListeners();
+      }
+    }
+
+    function storeTodoLocal(todoTitle, todoDesc) {
+      
+      // retrieve and parse existing JSON from localstorage
+      var json_temp = JSON.parse( localStorage.getItem('json_data') );
+
+      if (!json_temp) {
+        json_temp = [];
+      }
+
+      // creating a new todo ID based on length of existing localstorage array
+      var todoID = json_temp.length;
+
+      // add new todo object to JSON
+      json_temp.push({
+        "id": todoID,
+        "title": todoTitle,
+        "description": todoDesc,
+        "completed": false
+      });
+
+      // log updated JSON to console
+      console.log(json_temp);
+
+      // stringify updated JSON and store back in localStorage
+      localStorage.setItem('json_data', 
+        JSON.stringify(json_temp)
+      );
+
+      // return ID of new todo
+      return todoID;
+
+    }
+
+    function deleteAllTodos() {
+      if (confirm("Are you sure you want to delete all of your Todos?")) {
+        localStorage.removeItem('json_data');
+        $("#todo-list").empty();
+      }
+    }
+
+  </script>
+
+</html>
