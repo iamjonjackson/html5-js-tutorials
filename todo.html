@@ -166,7 +166,7 @@
     function deleteAllTodos() {
       if (confirm("Are you sure you want to delete all of your Todos?")) {
         localStorage.removeItem('json_data');
-        $("#todo-list").empty();
+        document.getElementById("todo-list").innerHTML = "";
       }
     }
 
